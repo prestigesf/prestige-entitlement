@@ -1,0 +1,52 @@
+{
+  "name": "prestige-entitlement",
+  "version": "0.1.0",
+  "description": "RevenueCat MCP entitlement proxy. Standalone layer in front of PrestigeMCP schema compression and tiered loading.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "prestige-entitlement": "./dist/cli.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "tsx --test test/*.test.ts",
+    "demo": "tsx src/demo.ts",
+    "start": "node dist/cli.js",
+    "dev": "tsx src/cli.ts"
+  },
+  "keywords": [
+    "mcp",
+    "revenuecat",
+    "entitlement",
+    "prestige",
+    "proxy"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/prestigesf/prestige-entitlement"
+  },
+  "dependencies": {
+    "prestige-mcp": "github:prestigesf/prestige-mcp#main"
+  },
+  "devDependencies": {
+    "@types/node": "^22.16.5",
+    "tsx": "^4.20.0",
+    "typescript": "^5.7.0"
+  }
+}
