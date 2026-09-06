@@ -52,6 +52,28 @@ test("timestamp outside 300s is replay-rejected", () => {
   if (!stale.ok) assert.equal(stale.reason, "timestamp_out_of_tolerance");
 });
 
+test("verifier matches RevenueCat published Python example (independent golden vector)", () => {
+  // Official docs compute: HMAC-SHA256(secret, f"{t}.".encode() + raw_body).hexdigest()
+  // Vector produced with that exact snippet, not with signRevenueCatWebhook.
+  const raw = Buffer.from(
+    '{"api_version":"1.0","event":{"id":"evt_vector","type":"TEST"}}',
+    "utf8",
+  );
+  const header =
+    "t=1700000000,v1=1fbc0b37e8cf221a6698293164a958cfc3b161d88dd862ecd7f547f35d2c8a34";
+  const ok = verifyRevenueCatWebhook({
+    rawBody: raw,
+    signatureHeader: header,
+    secret: SANDBOX_WEBHOOK_SECRET,
+    nowSec: 1_700_000_000,
+  });
+  assert.equal(ok.ok, true);
+  if (ok.ok) assert.equal(ok.timestamp, 1_700_000_000);
+
+  const signed = signRevenueCatWebhook(SANDBOX_WEBHOOK_SECRET, raw, 1_700_000_000);
+  assert.equal(signed, header);
+});
+
 test("missing or malformed header fails closed", () => {
   const raw = Buffer.from("{}", "utf8");
   const missing = verifyRevenueCatWebhook({
